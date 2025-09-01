@@ -1,7 +1,36 @@
+"use client";
 import React from 'react'
 import Link from 'next/link'
 
 const Order = () => {
+
+  // Track feature usage when component mounts
+  React.useEffect(() => {
+    fetch('/api/metrics', {
+      method: 'POST',
+      body: JSON.stringify({ action: 'usage' }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }, []);
+
+  // Track adoption when user clicks "Order Now"
+  const handleOrderClick = async () => {
+    try {
+      await fetch('/api/metrics', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'adoption' }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+    } catch (err) {
+      // Track error if increment fails
+      await fetch('/api/metrics', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'error' }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+  };
+    
   return (
 <div id='order' className='scroll-mt-16 sm:scroll-mt-20 bg-deepPurple'>
       <div className='mx-5 pt-14 grid sm:mx-12 lg:mx-24 sm:pt-24 sm:flex sm:justify-between'>
@@ -19,7 +48,7 @@ const Order = () => {
     </div>
     </div>
     <Link href="/form">
-    <button className='ml-5 mt-1 mb-7 sm:mb-28 sm:ml-24 cursor-pointer bg-lavender text-black font-semibold px-4 py-2 rounded-xl'>Order Now</button>
+    <button onClick={handleOrderClick} className='ml-5 mt-1 mb-7 sm:mb-28 sm:ml-24 cursor-pointer bg-lavender text-black font-semibold px-4 py-2 rounded-xl'>Order Now</button>
     </Link>
     </div>
   )

@@ -1,0 +1,15 @@
+.next
+node_modules
+
+# Version control and editor files
+.git
+.gitignore
+.vscode/
+
+# Environment files
+.env
+.env.local
+
+# Logs and temporary files
+npm-debug.log*
+*.log
